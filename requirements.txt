@@ -1,0 +1,12 @@
+torch>=2.1
+torchvision>=0.16
+numpy
+pillow
+opencv-python-headless
+scikit-image
+matplotlib
+pandas
+tabulate
+tqdm
+streamlit>=1.33
+streamlit-image-comparison
