@@ -20,6 +20,7 @@ from metrics import psnr, ssim
 try:
     import torch
     from inference import enhance
+    from smart_enhance import smart_enhance
     from models import load_generator
     TORCH_OK = True
 except Exception:  # lets the UI start (baselines only) even if torch is missing
@@ -138,7 +139,7 @@ with tab1:
             enh, dt = None, 0.0
         else:
             with st.spinner("Enhancing..."):
-                t0 = time.time(); gan_out = enhance(G, img, device); dt = time.time() - t0
+                t0 = time.time(); gan_out, _ = smart_enhance(G, img, device); dt = time.time() - t0
             enh = np.clip(strength * gan_out.astype(np.float32) + (1 - strength) * img.astype(np.float32),
                           0, 255).astype(np.uint8)
 
@@ -177,7 +178,7 @@ with tab2:
         results = {"Input (dark)": dark}
         results.update({n: f(dark) for n, f in BASELINES.items()})
         if G is not None:
-            results["GAN"] = enhance(G, dark, device)
+            results["GAN"], _ = smart_enhance(G, dark, device, allow_api=False)
 
         cols = st.columns(len(results) + 1)
         for col, (name, im) in zip(cols, list(results.items()) + [("Ground truth", gt)]):
