@@ -10,3 +10,5 @@ tabulate
 tqdm
 streamlit>=1.33
 streamlit-image-comparison
+
+requests
